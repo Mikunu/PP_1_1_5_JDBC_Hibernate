@@ -10,7 +10,8 @@ public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/users";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
-    public static Connection getConnection() {
+
+    public static Connection getConnection() {//todo: избавляемся от static (ломаем парадигму ООП)
         Connection connection = null;
         try {
             Class.forName(DB_DRIVER);

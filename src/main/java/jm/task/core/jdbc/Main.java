@@ -8,11 +8,11 @@ import jm.task.core.jdbc.util.Util;
 import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) {
-        // реализуйте алгоритм здесь
+        // реализуйте алгоритм здесь//todo: cleanCode..
         Util.getConnection();
         UserService userService = new UserServiceImpl();
-
         userService.createUsersTable();
 
         userService.saveUser("Name1", "LastName1", (byte) 20);

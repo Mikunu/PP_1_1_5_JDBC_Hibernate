@@ -4,7 +4,9 @@ import jm.task.core.jdbc.model.User;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+
+    UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();//todo: ..инициализация - через конструктор
+
     public void createUsersTable() {
         userDaoJDBC.createUsersTable();
     }
@@ -15,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
     public void saveUser(String name, String lastName, byte age) {
         userDaoJDBC.saveUser(name, lastName, age);
-        System.out.println(new StringBuilder().append("User с именем — ").append(name).append(" добавлен в базу данных"));
+        System.out.println(new StringBuilder().append("User с именем — ").append(name).append(" добавлен в базу данных"));//todo:  логи (их имитация) - для остальных методов тоже..
     }
 
     public void removeUserById(long id) {

@@ -8,19 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
+
+    //todo: константы выносим из тела методов, правильно их именуем..
+    private final static String CREATE_USERS_QUERY = "CREATE TABLE IF NOT EXISTS users " +
+            "(id BIGINT not NULL AUTO_INCREMENT, " +
+            "name TEXT not NULL, " +
+            "lastName TEXT not NULL, " +
+            "age TINYINT not NULL, " +
+            "PRIMARY KEY (id))";
+
+    //todo: созаем поле Connection connection и инициализируем его через конструктор
+
     public UserDaoJDBCImpl() {
     }
 
-    public void createUsersTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS users " +
-                "(id BIGINT not NULL AUTO_INCREMENT, " +
-                "name TEXT not NULL, " +
-                "lastName TEXT not NULL, " +
-                "age TINYINT not NULL, " +
-                "PRIMARY KEY (id))";
+    public void createUsersTable() {//todo: только Statement statement - подается в кач.ресурса
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+            statement.executeUpdate(CREATE_USERS_QUERY);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,7 +48,6 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setByte(3, age);
-
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

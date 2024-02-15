@@ -19,18 +19,8 @@ public class User {
     private Byte age;
 
     public User() {
-
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                '}';
-    }
 
     public User(String name, String lastName, Byte age) {
         this.name = name;
@@ -68,5 +58,17 @@ public class User {
 
     public void setAge(Byte age) {
         this.age = age;
+    }
+
+    //todo: нужно добвить equals/hashCode переопределение
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
