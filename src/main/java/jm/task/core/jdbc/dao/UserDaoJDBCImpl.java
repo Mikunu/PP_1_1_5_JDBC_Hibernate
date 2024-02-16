@@ -8,23 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-
-    //todo: константы выносим из тела методов, правильно их именуем..
+    Connection connection;
     private final static String CREATE_USERS_QUERY = "CREATE TABLE IF NOT EXISTS users " +
             "(id BIGINT not NULL AUTO_INCREMENT, " +
             "name TEXT not NULL, " +
             "lastName TEXT not NULL, " +
             "age TINYINT not NULL, " +
             "PRIMARY KEY (id))";
-
-    //todo: созаем поле Connection connection и инициализируем его через конструктор
+    private static final String DROP_USERS_QUERY = "DROP TABLE IF EXISTS users";
+    private static final String SAVE_USER_QUERY = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
+    private static final String DELETE_USER_QUERY = "DELETE from users WHERE id = ";
+    private static final String SELECT_USERS_QUERY = "SELECT id, name, lastName, age FROM users";
+    private static final String CLEAN_USERS_QUERY = "TRUNCATE TABLE users";
 
     public UserDaoJDBCImpl() {
+        connection = Util.getConnection();
     }
 
-    public void createUsersTable() {//todo: только Statement statement - подается в кач.ресурса
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
+    public void createUsersTable() {
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_USERS_QUERY);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,19 +34,15 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String sql = "DROP TABLE IF EXISTS users";
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(DROP_USERS_QUERY);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        String sql = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
-        try (Connection connection = Util.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(SAVE_USER_QUERY)) {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setByte(3, age);
@@ -55,10 +53,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        String sql = "DELETE from users WHERE id = " + id;
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(DELETE_USER_QUERY + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,10 +62,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT id, name, lastName, age FROM users";
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(sql);
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SELECT_USERS_QUERY);
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -86,10 +80,18 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String sql = "TRUNCATE TABLE users";
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(CLEAN_USERS_QUERY);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            if ((connection != null) && (!connection.isClosed())) {
+                connection.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

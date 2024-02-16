@@ -5,30 +5,43 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();//todo: ..инициализация - через конструктор
+    UserDaoJDBCImpl userDaoJDBC;
 
+    public UserServiceImpl() {
+        userDaoJDBC = new UserDaoJDBCImpl();
+    }
     public void createUsersTable() {
         userDaoJDBC.createUsersTable();
+        System.out.println("Таблица создана");
     }
 
     public void dropUsersTable() {
         userDaoJDBC.dropUsersTable();
+        System.out.println("Таблица удалена");
     }
 
     public void saveUser(String name, String lastName, byte age) {
         userDaoJDBC.saveUser(name, lastName, age);
-        System.out.println(new StringBuilder().append("User с именем — ").append(name).append(" добавлен в базу данных"));//todo:  логи (их имитация) - для остальных методов тоже..
+        System.out.printf("User с именем – %s добавлен в базу данных\n", name);
     }
 
     public void removeUserById(long id) {
         userDaoJDBC.removeUserById(id);
+        System.out.printf("User с ID – %d удален из базы данных", id);
     }
 
     public List<User> getAllUsers() {
+        System.out.println("Получены пользователи");
         return userDaoJDBC.getAllUsers();
     }
 
     public void cleanUsersTable() {
         userDaoJDBC.cleanUsersTable();
+        System.out.println("Таблица очищена");
+    }
+
+    public void closeConnection() {
+        userDaoJDBC.closeConnection();
+        System.out.println("Соединение закрыто");
     }
 }
