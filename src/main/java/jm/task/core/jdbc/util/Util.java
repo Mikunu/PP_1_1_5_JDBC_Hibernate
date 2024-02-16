@@ -11,7 +11,7 @@ public class Util {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
 
-    public static Connection getConnection() {//todo: избавляемся от static (ломаем парадигму ООП)
+    public Connection getConnection() {
         Connection connection = null;
         try {
             Class.forName(DB_DRIVER);

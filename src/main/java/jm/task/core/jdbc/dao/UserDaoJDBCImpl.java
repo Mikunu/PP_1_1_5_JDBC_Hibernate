@@ -22,7 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private static final String CLEAN_USERS_QUERY = "TRUNCATE TABLE users";
 
     public UserDaoJDBCImpl() {
-        connection = Util.getConnection();
+        connection = new Util().getConnection();
     }
 
     public void createUsersTable() {
