@@ -1,47 +1,50 @@
 package jm.task.core.jdbc.service;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    UserDaoJDBCImpl userDaoJDBC;
+    UserDaoHibernateImpl userDaoHibernate;
 
     public UserServiceImpl() {
-        userDaoJDBC = new UserDaoJDBCImpl();
+        userDaoHibernate = new UserDaoHibernateImpl();
     }
+
+    @Override
     public void createUsersTable() {
-        userDaoJDBC.createUsersTable();
+        userDaoHibernate.createUsersTable();
         System.out.println("Таблица создана");
     }
 
+    @Override
     public void dropUsersTable() {
-        userDaoJDBC.dropUsersTable();
+        userDaoHibernate.dropUsersTable();
         System.out.println("Таблица удалена");
     }
 
+    @Override
     public void saveUser(String name, String lastName, byte age) {
-        userDaoJDBC.saveUser(name, lastName, age);
+        userDaoHibernate.saveUser(name, lastName, age);
         System.out.printf("User с именем – %s добавлен в базу данных\n", name);
     }
 
+    @Override
     public void removeUserById(long id) {
-        userDaoJDBC.removeUserById(id);
+        userDaoHibernate.removeUserById(id);
         System.out.printf("User с ID – %d удален из базы данных", id);
     }
 
+    @Override
     public List<User> getAllUsers() {
         System.out.println("Получены пользователи");
-        return userDaoJDBC.getAllUsers();
+        return userDaoHibernate.getAllUsers();
     }
 
+    @Override
     public void cleanUsersTable() {
-        userDaoJDBC.cleanUsersTable();
+        userDaoHibernate.cleanUsersTable();
         System.out.println("Таблица очищена");
-    }
-
-    public void closeConnection() {
-        userDaoJDBC.closeConnection();
-        System.out.println("Соединение закрыто");
     }
 }

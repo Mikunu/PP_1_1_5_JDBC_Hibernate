@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
     Connection connection;
-    private final static String CREATE_USERS_QUERY = "CREATE TABLE IF NOT EXISTS users " +
+    private static final String CREATE_USERS_QUERY = "CREATE TABLE IF NOT EXISTS users " +
             "(id BIGINT not NULL AUTO_INCREMENT, " +
             "name TEXT not NULL, " +
             "lastName TEXT not NULL, " +
@@ -25,6 +25,7 @@ public class UserDaoJDBCImpl implements UserDao {
         connection = new Util().getConnection();
     }
 
+    @Override
     public void createUsersTable() {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_USERS_QUERY);
@@ -33,6 +34,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(DROP_USERS_QUERY);
@@ -41,6 +43,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void saveUser(String name, String lastName, byte age) {
         try (PreparedStatement statement = connection.prepareStatement(SAVE_USER_QUERY)) {
             statement.setString(1, name);
@@ -52,6 +55,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void removeUserById(long id) {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(DELETE_USER_QUERY + id);
@@ -60,6 +64,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
@@ -79,6 +84,7 @@ public class UserDaoJDBCImpl implements UserDao {
         return userList;
     }
 
+    @Override
     public void cleanUsersTable() {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CLEAN_USERS_QUERY);
